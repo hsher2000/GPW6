@@ -44,27 +44,54 @@ import {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface Game {
-  id: string;
-  title: string;
-  subtitle: string;
-  genre: string;
-  engine: string;
-  startDate: string;
-  endDate: string;
-  status: "completed" | "in-progress" | "prototype";
-  description: string;
-  analysis: string;
-  optimization: string;
-  implementation: string;
-  implImages: string[];
-  screenshots: string[];
-  videoUrl: string;
-  tags: string[];
-  teamSize: number;
-  role: string;
-  platforms: string[];
-  highlights: string[];
+function normalizeGame(game: any): Game {
+    return {
+        ...game,
+
+        // 基础字段
+        id: game.id || crypto.randomUUID(),
+        title: game.title || "",
+        subtitle: game.subtitle || "",
+        genre: game.genre || "",
+        engine: game.engine || "",
+
+        // 防止页面报错
+        status: game.status || "prototype",
+
+        description: game.description || "",
+
+        screenshots: game.screenshots || [],
+
+        tags: game.tags || [],
+
+        platforms: game.platforms || [],
+
+        highlights: game.highlights || [],
+
+        implImages: game.implImages || [],
+
+        features: game.features || [],
+
+        analysis: game.analysis || {
+            overview: "",
+            coreLoop: "",
+            challenges: [],
+            solutions: [],
+            innovations: []
+        },
+
+        optimization: game.optimization || {
+            strategies: [],
+            metrics: [],
+            improvements: []
+        },
+
+        implementation: game.implementation || {
+            engine: game.engine || "",
+            languages: [],
+            tools: []
+        }
+    };
 }
 
 type NavSection = "portfolio" | "about" | "admin";
@@ -1199,7 +1226,7 @@ async function loadGames(): Promise<Game[]> {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error || !data || data.length === 0) return SEED_GAMES;
+    if (error || !data || data.length === 0) return data?.map(normalizeGame) || [];
 
   return data.map((g: any) => ({
     ...g,
@@ -2036,7 +2063,9 @@ function GameCard({ game, index, onClick }: GameCardProps) {
   const isCN = lang === "cn";
   const [hover, setHover] = useState(false);
   const [imgIdx, setImgIdx] = useState(0);
-  const status = STATUS_CONFIG[game.status];
+    const status =
+        STATUS_CONFIG[game.status] ||
+        STATUS_CONFIG.prototype;
 
   useEffect(() => {
     if (!hover) return;
@@ -2404,7 +2433,9 @@ function GameModal({ game, onClose }: GameModalProps) {
   const isCN = lang === "cn";
   const [tab, setTab] = useState<ModalTab>("overview");
   const [imgIdx, setImgIdx] = useState(0);
-  const status = STATUS_CONFIG[game.status];
+    const status =
+        STATUS_CONFIG[game.status] ||
+        STATUS_CONFIG.prototype;
   const w = useWindowWidth();
   const isMobile = w < 640;
   const isTablet = w < 900;
