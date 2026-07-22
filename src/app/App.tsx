@@ -48,49 +48,48 @@ function normalizeGame(game: any): Game {
     return {
         ...game,
 
-        // 基础字段
         id: game.id || crypto.randomUUID(),
+
         title: game.title || "",
+
         subtitle: game.subtitle || "",
+
         genre: game.genre || "",
+
         engine: game.engine || "",
 
-        // 防止页面报错
         status: game.status || "prototype",
 
         description: game.description || "",
 
-        screenshots: game.screenshots || [],
+
+        // 重点：所有字符串防 null
+
+        category: game.category || "",
+
+        version: game.version || "",
+
+        author: game.author || "",
+
+
+        // 数组防 null
 
         tags: game.tags || [],
+
+        screenshots: game.screenshots || [],
 
         platforms: game.platforms || [],
 
         highlights: game.highlights || [],
 
-        implImages: game.implImages || [],
-
         features: game.features || [],
 
-        analysis: game.analysis || {
-            overview: "",
-            coreLoop: "",
-            challenges: [],
-            solutions: [],
-            innovations: []
-        },
 
-        optimization: game.optimization || {
-            strategies: [],
-            metrics: [],
-            improvements: []
-        },
+        analysis: game.analysis || {},
 
-        implementation: game.implementation || {
-            engine: game.engine || "",
-            languages: [],
-            tools: []
-        }
+        optimization: game.optimization || {},
+
+        implementation: game.implementation || {}
     };
 }
 
@@ -2303,7 +2302,7 @@ function GameCard({ game, index, onClick }: GameCardProps) {
             { label: t.cardTeam, value: `×${game.teamSize}` },
             {
               label: t.cardRole,
-              value: game.role.split(" ")[0],
+              value: (game.role || "").split(" ")[0],
             },
             {
               label: t.cardPlat,
