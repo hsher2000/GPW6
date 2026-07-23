@@ -6,6 +6,7 @@ import {
   createContext,
   useContext,
 } from "react";
+import React from "react";
 import { supabase } from "../lib/supabase";
 
 import {
@@ -3358,15 +3359,55 @@ function Admin({ games, onSave }: AdminProps) {
     onSave(games.filter((g) => g.id !== id));
   };
 
-  const handleSaveForm = () => {
-    if (view === "edit" && editing) {
-      onSave(
-        games.map((g) =>
-          g.id === editing.id ? { ...form, id: editing.id } : g,
-        ),
-      );
-    } else {
-      onSave([...games, { ...form, id: genId() }]);
+    const handleSaveForm = async () => {
+        if (view === "edit" && editing) {
+
+            const { error } = await supabase
+                .from("games")
+                .update({
+                    ...form,
+                    id: editing.id
+                })
+                .eq("id", editing.id);
+
+
+            if (error) {
+                console.error(error);
+                alert("保存失败");
+                return;
+            }
+
+
+            onSave(
+                games.map((g) =>
+                    g.id === editing.id
+                        ? { ...form, id: editing.id }
+                        : g
+                )
+            );
+        }else {
+            const newGame = {
+                ...form,
+                id: genId()
+            };
+
+
+            const { error } = await supabase
+                .from("games")
+                .insert(newGame);
+
+
+            if (error) {
+                console.error(error);
+                alert("新增失败");
+                return;
+            }
+
+
+            onSave([
+                ...games,
+                newGame
+            ]);
     }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
