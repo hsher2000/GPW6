@@ -3365,8 +3365,13 @@ function Admin({ games, onSave }: AdminProps) {
             const { error } = await supabase
                 .from("games")
                 .update({
-                    ...form,
-                    id: editing.id
+                    title: form.title,
+                    subtitle: form.subtitle,
+                    genre: form.genre,
+                    engine: form.engine,
+                    start_date: form.start_date,
+                    end_date: form.end_date,
+                    status: form.status
                 })
                 .eq("id", editing.id);
 
@@ -3394,7 +3399,15 @@ function Admin({ games, onSave }: AdminProps) {
 
             const { error } = await supabase
                 .from("games")
-                .insert(newGame);
+                .insert({
+                    title: newGame.title,
+                    subtitle: newGame.subtitle,
+                    genre: newGame.genre,
+                    engine: newGame.engine,
+                    start_date: newGame.start_date,
+                    end_date: newGame.end_date,
+                    status: newGame.status
+                })
 
 
             if (error) {
