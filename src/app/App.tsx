@@ -2067,7 +2067,7 @@ function GameCard({ game, index, onClick }: GameCardProps) {
         STATUS_CONFIG[game.status] ||
         STATUS_CONFIG.prototype;
 
-  useEffect(() => {
+    useEffect(() => {games.map((game) => (
     if (!hover) return;
     const id = setInterval(
       () => setImgIdx((i) => (i + 1) % game.screenshots.length),
@@ -2883,7 +2883,7 @@ function GameModal({ game, onClose }: GameModalProps) {
                 </div>
                 {tab === "implementation" &&
                   (() => {
-                    const imgs = (game.implImages ?? []).filter(
+                      const imgs = (currentGame?.implImages ?? []).filter(
                       Boolean,
                     );
                     if (!imgs.length) return null;
