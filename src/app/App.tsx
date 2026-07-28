@@ -2132,7 +2132,7 @@ function GameCard({ game, index, onClick }: GameCardProps) {
           <img
             key={i}
             src={src}
-            alt={`${game.title} screenshot ${i + 1}`}
+            alt={`screenshot ${i + 1}`}
             style={{
               position: "absolute",
               inset: 0,
