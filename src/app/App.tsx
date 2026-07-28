@@ -3365,13 +3365,13 @@ function Admin({ games, onSave }: AdminProps) {
             const { error } = await supabase
                 .from("games")
                 .update({
-                    title: game.title,
-                    subtitle: game.subtitle,
-                    genre: game.genre,
-                    engine: game.engine,
-                    start_date: game.start_date,
-                    end_date: game.end_date,
-                    status: game.status
+                    title: form.title,
+                    subtitle: form.subtitle,
+                    genre: form.genre,
+                    engine: form.engine,
+                    start_date: form.startDate,
+                    end_date: form.endDate,
+                    status: form.status
                 })
                 .eq("id", editing.id);
 
